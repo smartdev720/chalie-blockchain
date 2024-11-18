@@ -1,0 +1,9 @@
+.search-wrapper {
+  clip-path: polygon(0 25%, 5% 0, 100% 0, 100% 75%, 95% 100%, 0% 100%);
+}
+
+@media (max-width: 768px) {
+  .search-wrapper {
+    clip-path: polygon(0 25%, 2% 0, 100% 0, 100% 75%, 98% 100%, 0% 100%);
+  }
+}

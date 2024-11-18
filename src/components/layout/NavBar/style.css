@@ -1,0 +1,39 @@
+.nav-wrapper {
+  clip-path: polygon(0 20%, 1% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.connect-wrapper {
+  clip-path: polygon(0 0, 0 0, 100% 0, 100% 83%, 95% 100%, 0% 100%);
+}
+
+@media (max-width: 1024px) {
+  .nav-wrapper {
+    clip-path: polygon(0 20%, 2% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-wrapper {
+    clip-path: polygon(0 20%, 3% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-wrapper {
+    clip-path: polygon(0 20%, 4% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+  }
+
+  .connect-wrapper {
+    clip-path: polygon(0 0, 0 0, 100% 0, 100% 80%, 85% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 425px) {
+  .nav-wrapper {
+    clip-path: polygon(0 20%, 5% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+  }
+
+  .connect-wrapper {
+    clip-path: polygon(0 0, 0 0, 100% 0, 100% 80%, 80% 100%, 0% 100%);
+  }
+}
