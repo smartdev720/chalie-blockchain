@@ -51,6 +51,15 @@
   clip-path: polygon(0 30%, 10% 0, 100% 0, 100% 0%, 100% 100%, 0% 100%);
 }
 
+.blur-effect {
+  filter: blur(0px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.blur-effect-hover {
+  filter: blur(8px);
+}
+
 @media (max-width: 1024px) {
   .staking-card-wrapper {
     clip-path: polygon(0 4%, 6% 0, 100% 0, 100% 96%, 94% 100%, 0% 100%);

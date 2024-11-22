@@ -1,12 +1,15 @@
-import React, { createContext, useContext, ReactNode, useEffect } from "react";
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import React, { createContext, useContext, ReactNode, useEffect, useState } from "react";
+import { useAccount, useConnect, useDisconnect, useSwitchChain, useBalance } from "wagmi";
+import { ethers } from "ethers";
 
 interface WalletContextProps {
     connectWallet: (walletName: string) => void;
     account: string | null | undefined;
+    balance: string | null;
     disconnectWallet: () => void;
     isConnected: boolean;
     isWalletInstalled: (walletName: string) => boolean;
+    chainId: number | null | undefined;
 }
 
 const WalletContext = createContext<WalletContextProps | undefined>(undefined);
@@ -24,10 +27,12 @@ interface WalletProviderProps {
 }
 
 const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
+    // const [balance, setBalance] = useState<string | null>(null);
     const { connect, connectors } = useConnect();
     const { disconnect } = useDisconnect();
-    const { address, isConnected, chain } = useAccount();
+    const { address, isConnected, chainId } = useAccount();
     const network = useSwitchChain();
+    const balance = useBalance({address, token: "0x463C342E3353b67c6Da2a6F570a0A4E20B6C74e0"});
 
     const isWalletInstalled = (walletName: string): boolean => {
         if(!window.ethereum.isMetaMask && walletName === "MetaMask") {
@@ -66,9 +71,20 @@ const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
     useEffect(() => {
         if(isConnected) {
-            network.switchChain({chainId: 8453});
+            network.switchChain({chainId: 84532});
         }
     }, [isConnected]);
+
+    useEffect(() => {
+        const b = balance;
+        const i = 0;
+        console.log(balance.data);
+        // if (isConnected && userBalance) {
+        //     const balanceInETH = ethers.formatUnits(userBalance.value, 18);
+        //     setBalance(balanceInETH);
+        // }
+    }, [isConnected]);
+
 
     return (
         <WalletContext.Provider
@@ -77,7 +93,9 @@ const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                 disconnectWallet,
                 account: isConnected ? address : null,
                 isConnected,
-                isWalletInstalled
+                isWalletInstalled,
+                chainId: isConnected ? chainId : null,
+                balance: "0",
             }}
         >
             {children}

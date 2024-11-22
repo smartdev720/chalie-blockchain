@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import "./style.css";
 
-const Switch = () => {
-  const [isOn, setIsOn] = useState(false);
+interface SwitchProps {
+  isOn: boolean;
+  setIsOn: (value: boolean) => void;
+}
+
+const Switch: React.FC<SwitchProps> = ({isOn, setIsOn}) => {
 
   const handleToggle = () => {
     setIsOn(!isOn);

@@ -1,20 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import Switch from "../../components/common/Switch";
 import Toggle from "../../components/common/Toggle";
 import Search from "../../components/common/Search";
 import Dropdown from "../../components/common/Dropdown";
-import StakingCard from "../../components/common/StakingCard";
-
-const infos = [
-    { key: "APR", value: "379,777,060.43%" },
-    { key: "Earn", value: "PHCF" },
-    { key: "Deposit Fee", value: "3%" },
-    { key: "Harvest Lockup", value: "8 Hours" },
-];
-
+import StakingCardGroup from "../../components/common/StakingCardGroup";
+import useStaking from "../../hooks/useStaking";
+import { StakesType } from "../../types/stakeTypes";
+import { initialStakingCardGroup } from "../../constant/staking";
+import StakingModal from "../../components/common/StakingModal";
 
 const Staking = () => {
+    const [history, setHistory] = useState<StakesType[] | null>(null);
+    const [stakedToggleOn, setStakedToggleOn] = useState<boolean>(false);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalInfo, setModalInfo] = useState<any>(false);
+    const {stakeHistory} = useStaking();
+
+    useEffect(() => {
+        if (stakeHistory) {
+            const sHistory: StakesType[] = initialStakingCardGroup.map((stake: StakesType) => {
+                const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
+                return selectedHistory ? selectedHistory : stake;
+            });
+            setHistory(sHistory);
+        } else {
+            setHistory(initialStakingCardGroup);
+        }
+    }, [stakeHistory]);
+
+    useEffect(() => {
+        if(stakedToggleOn) setHistory(stakeHistory);
+        else {
+            if (stakeHistory) {
+                const sHistory: StakesType[] = initialStakingCardGroup.map((stake: StakesType) => {
+                    const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
+                    return selectedHistory ? selectedHistory : stake;
+                });
+                setHistory(sHistory);
+            } else {
+                setHistory(initialStakingCardGroup);
+            }
+        }
+    }, [stakedToggleOn]);
+
     return (
         <div className="2xl:w-[90%] xl:x-[90%] lg:w-full mx-auto mt-20">
             {/* Title bar */}
@@ -30,7 +59,7 @@ const Staking = () => {
                             <div className="flex items-center flex-row gap-4 2xl:basis-1/3 xl:basis-1/2">
                                 <div className="flex flex-row items-center justify-between gap-4">
                                     <span className="text-white text-base font-normal">Staked only</span>
-                                    <Switch />
+                                    <Switch isOn={stakedToggleOn} setIsOn={setStakedToggleOn} />
                                 </div>
                                 <div>
                                     <Toggle tab1="Active" tab2="Liquidity" />
@@ -46,7 +75,7 @@ const Staking = () => {
                     <div className="block 2xl:hidden xl:hidden lg:hidden md:block sm:block w-full">
                         <div className="flex items-center justify-between">
                             <span className="text-white text-base font-normal">Staked only</span>
-                            <Switch />
+                            <Switch isOn={stakedToggleOn} setIsOn={setStakedToggleOn} />
                         </div>
                         <div className="w-full mt-4">
                             <Toggle tab1="Active" tab2="Liquidity" />
@@ -73,13 +102,9 @@ const Staking = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-[92px] 2xl:mt-4 xl:mt-4 lg:mt-4 md:mt-[92px] sm:mt-[92px]">
-                <StakingCard items={infos} />
-                <StakingCard items={infos} />
-                <StakingCard items={infos} />
-                <StakingCard items={infos} />
-                <StakingCard items={infos} />
-                <StakingCard items={infos} />
+                <StakingCardGroup items={history} setModalOpen={setModalOpen} setModalInfo={setModalInfo} />
             </div>
+            <StakingModal isOpen={modalOpen} onClose={() => setModalOpen(false)} info={modalInfo} />
         </div>
     );
 }
