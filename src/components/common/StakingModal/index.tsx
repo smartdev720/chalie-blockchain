@@ -6,6 +6,12 @@ import useStaking from "../../../hooks/useStaking";
 import { useWallet } from "../../../context/WalletContext";
 import { REQUIRED_CHAIN_ID } from "../../../constant/wallets";
 import { toast } from "react-toastify";
+import { useReadContract } from "wagmi";
+import tokenABI from "../../../contracts/TokenA.json";
+import useContract from "../../../hooks/useContract";
+import useToken from "../../../hooks/useToken";
+import { ethers } from "ethers";
+import Spinner from "../Spinner";
 
 type StakingModalItemType = {
     apy: number;
@@ -22,9 +28,11 @@ interface StakingModalProps {
 const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
     const [stakeAmount, setStakeAmount] = useState<string>("");
     const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
-
+    const [loading, setLoading] = useState(false);
     const {stakeToken} = useStaking();
-    const {balance, chainId} = useWallet();
+    const {token} = useContract();
+    const {chainId, account} = useWallet();
+    const {balanceOf} = useToken();
 
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -36,34 +44,27 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => setStakeAmount(e.target.value);
 
     const handleStakeClick = async () => {
-        debugger;
-        if(balance && chainId === REQUIRED_CHAIN_ID) {
-            if(Number(balance) >= Number(stakeAmount)) {
-                const staked = await stakeToken(stakeAmount, info.apy);
-                if(staked) {
-                    setStakeAmount("");
-                    onClose();
+        try {
+            if(account) {
+                setLoading(true);
+                const balance = await balanceOf(account);
+                const balanceInWei = ethers.parseUnits(balance as string, 18);
+                const stakeAmountInWei = ethers.parseUnits(stakeAmount, 18);
+                if(balanceInWei >= stakeAmountInWei) {
+                    const staked = await stakeToken(stakeAmountInWei, info.apy);
+                    if(staked) {
+                        setStakeAmount("");
+                        onClose();
+                    }
+                } else {
+                    toast.warning("Your amount is not required for current staking amount");
                 }
             }
+        } catch(error) {
+            toast.error("An unexpected error occurred. Check the console for details.");
+        } finally {
+            setLoading(false);
         }
-        // if (balance) {
-        //     if(chainId === REQUIRED_CHAIN_ID) {
-        //         const userBalance = balance.data?.value;
-        //         const sAmount = BigInt(stakeAmount);
-        //         if (userBalance && sAmount) {
-        //             const userBalanceInWei = ethers.parseUnits(userBalance.toString(), 18);
-        //             const stakeAmountInWei = ethers.parseUnits(stakeAmount.toString(), 18);
-        //             if (userBalanceInWei >= stakeAmountInWei) {
-        //                 // const staked = await stakeToken(stakeAmount, info.apy);
-        //                 // if(staked) {
-        //                 //     onClose();
-        //                 // }
-        //             }
-        //         }
-        //     } else {
-        //         toast.info("Please change your current chain in your wallet");
-        //     }
-        // }
     }
 
     useEffect(() => {
@@ -73,7 +74,7 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
             setBtnDisabled(true);
         }
     }, [stakeAmount]);
-    
+
     return (
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center ${isOpen ? 'visible opacity-100' : 'invisible opacity-0'} transition-opacity duration-300`}
@@ -107,11 +108,11 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
                             <div className={`stake-button-wrapper h-[54px] mt-10 w-full relative ${btnDisabled ? "bg-[#212121]" : "bg-gradient"}`}>
                                 <div className={`stake-button-wrapper inset-[3px] absolute ${btnDisabled ? "bg-[#212121]" : "bg-white"}`}>
                                     <button 
-                                        className={`stake-button-wrapper inset-[1px] transition-all duration-300 ease-in-out ${btnDisabled ? "cursor-not-allowed text-[#444444]" : "cursor-pointer text-white bg-gradient"} absolute  text-base`} 
+                                        className={`stake-button-wrapper flex items-center justify-center inset-[1px] transition-all duration-300 ease-in-out ${btnDisabled ? "cursor-not-allowed text-[#444444]" : "cursor-pointer text-white bg-gradient"} absolute  text-base`} 
                                         disabled={btnDisabled}
                                         onClick={handleStakeClick}
                                     >
-                                        Stake
+                                        Stake {loading && <Spinner size={20} margin={12} />}
                                     </button>
                                 </div>
                             </div>

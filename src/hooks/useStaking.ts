@@ -4,7 +4,7 @@ import { StakesType } from "../types/stakeTypes";
 import { ethers } from "ethers";
 import { useWallet } from "../context/WalletContext";
 import { REQUIRED_CHAIN_ID } from "../constant/wallets";
-import { STAKING_CONTRACT_ADDRESS } from "../constant/contract";
+import useToken from "./useToken";
 import { toast } from "react-toastify";
 
 const useStaking = () => {
@@ -14,16 +14,7 @@ const useStaking = () => {
 
     const {staking, token} = useContract();
     const {chainId} = useWallet();
-
-    const ensureTokenApprove = async (amount: bigint) => {
-        try {
-            if(!token) throw new Error("Invalid Token Approve");
-            const txApprove = await token.approve(STAKING_CONTRACT_ADDRESS, amount); 
-            await txApprove.wait();
-        } catch(error) {
-            console.error("Invalid Token Approve : ", error);
-        }
-    }
+    const {ensureTokenApprove} = useToken();
 
     const getStakeHistory = async () => {
         try {
@@ -51,51 +42,48 @@ const useStaking = () => {
                 setStakeHistory(formattedHistory);
                 setReloadHistory((prev) => !prev);
             }
-        } catch(error) {
-            
-            console.error(error);
+        } catch(error: any) {
+            if (error.reason) {
+                toast.error(error.reason);
+            } else {
+                toast.error("An unexpected error occurred. Check the console for details.");
+            }
             setStakeHistory(null);
         } finally{ 
             setLoading(false);
         }
     }
 
-    const stakeToken = async (amount: string, lockPeriod: number): Promise<boolean | any> => {
+    const stakeToken = async (amount: bigint, lockPeriod: number): Promise<boolean | any> => {
         try {
             if (!staking || !token) throw new Error("Contract not initialized");
             if(chainId === REQUIRED_CHAIN_ID) {
                 setLoading(true);
-                const amountInWei = ethers.parseUnits(amount, 18);
-
                 // Test mode
                 const lockPeriodInSeconds = lockPeriod;
-                
-                // const txApprove = await token.approve(STAKING_CONTRACT_ADDRESS, amountInWei);
-                // await txApprove.wait();
 
-                await ensureTokenApprove(amountInWei);
-
-                const tx = await staking.stake(amountInWei, lockPeriodInSeconds);
-                console.log("Transaction sent:", tx.hash);
-    
-                const receipt = await tx.wait();
-                console.log("Transaction mined:", receipt);
-                
-                const event = receipt.events?.find((e: any) => e.event === "Staked");
-                if (event) {
-                    const [user, amount, lockPeriod] = event.args;
-                    console.log(`User ${user} staked ${amount} tokens for ${lockPeriod} seconds.`);
+                const approved = await ensureTokenApprove(amount);
+                if(approved) {
+                    const tx = await staking.stake(amount, lockPeriodInSeconds);
+                    console.log("Transaction sent:", tx.hash);
+        
+                    const receipt = await tx.wait();
+                    console.log("Transaction mined:", receipt);
+                    
+                    const event = receipt.events?.find((e: any) => e.event === "Staked");
+                    if (event) {
+                        const [user, amount, lockPeriod] = event.args;
+                        console.log(`User ${user} staked ${amount} tokens for ${lockPeriod} seconds.`);
+                    }
+                    return true;
                 }
-                return true;
             }
             return false;
         } catch(error: any) {
             if (error.reason) {
-                console.error("Revert reason:", error.reason);
-                alert(`Error: ${error.reason}`);
+                toast.error(error.reason);
             } else {
-                console.error("Unexpected error:", error);
-                alert("An unexpected error occurred. Check the console for details.");
+                toast.error("An unexpected error occurred. Check the console for details.");
             }
         } finally {
             setLoading(false);
