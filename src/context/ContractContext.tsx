@@ -22,6 +22,7 @@ const ContractProvider: React.FC<ContractProviderProps> = ({children}) => {
     useEffect(() => {
         const initContracts = async () => {
             try {
+                debugger
                 let provider: ethers.BrowserProvider | null = null;
 
                 if(window.ethereum) {

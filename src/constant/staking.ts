@@ -43,4 +43,15 @@ const initialStakingCardGroup:StakesType[] = [
     },
 ];
 
-export {initialStakingCardGroup};
+type ExtraRewardRates = Map<number, Map<number, number>>;
+
+const extraRewardRates = new Map([
+    [30, new Map([[100, 0.5], [50, 0.25], [25, 0.125]])],
+    [60, new Map([[100, 1], [50, 0.5], [25, 0.25]])],
+    [90, new Map([[100, 2], [50, 1]])],
+    [120, new Map([[100, 3], [50, 1.5]])],
+    [180, new Map([[100, 4], [50, 2]])],
+]);
+
+
+export {initialStakingCardGroup, extraRewardRates};

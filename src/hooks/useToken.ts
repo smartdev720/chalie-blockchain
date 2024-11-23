@@ -12,24 +12,14 @@ const useToken = () => {
     const {chainId} = useWallet();
 
     const ensureTokenApprove = async (amount: bigint): Promise<boolean | null | undefined> => {
-        try {
-            if(!token) throw new Error("Invalid Token Approve");
-            if(chainId === REQUIRED_CHAIN_ID) {
-                setLoading(true);
-                const txApprove = await token.approve(STAKING_CONTRACT_ADDRESS, amount); 
-                await txApprove.wait();
-                return true;
-            } else {
-                toast.error("Please change your current chain");
-            }
-        } catch(error: any) {
-            if(error.reason) {
-                toast.error(error.reason);
-            } else {
-                toast.error("An unexpected error occurred. Check the console for details.");
-            }
-        } finally {
-            setLoading(false);
+        if(!token) throw new Error("Invalid Token Approve");
+        if(chainId === REQUIRED_CHAIN_ID) {
+            setLoading(true);
+            const txApprove = await token.approve(STAKING_CONTRACT_ADDRESS, amount); 
+            await txApprove.wait();
+            return true;
+        } else {
+            toast.error("Please change your current chain");
         }
     }
     

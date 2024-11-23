@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { StakesType } from "../../../types/stakeTypes";
 import { useWallet } from "../../../context/WalletContext";
-import { isValidWithdraw } from "../../../lib/stake";
+import { extendPercentsOf, isValidWithdraw } from "../../../lib/stake";
 
 interface StakingCardProps {
     items: StakesType[] | null;
@@ -17,6 +17,13 @@ const StakingCardGroup: React.FC<StakingCardProps> = ({ items, setModalOpen, set
 
     const handleStakeClick = (apy: number, rewardRate: number) => {
         const info = {apy, rewardRate};
+        setModalInfo(info);
+        setModalOpen(true);
+    }
+
+    const handleClaimClick = (apy: number, rewardRate: number, extendPercents: number[]) => {
+        debugger;
+        const info = {apy, rewardRate, extendPercents};
         setModalInfo(info);
         setModalOpen(true);
     }
@@ -108,6 +115,7 @@ const StakingCardGroup: React.FC<StakingCardProps> = ({ items, setModalOpen, set
                                                     <button 
                                                         className={`${isValidWithdraw(item.start, item.apy) ? "cursor-pointer text-white bg-gradient" : "cursor-not-allowed bg-[#212121] text-[#444444]"} absolute  text-base`}
                                                         disabled={!isValidWithdraw(item.start, item.apy)}
+                                                        onClick={() => {handleClaimClick(item.apy, item.rewardRate, extendPercentsOf(item.apy))}}
                                                     >
                                                         Claim
                                                     </button>

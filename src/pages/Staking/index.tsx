@@ -15,10 +15,31 @@ const Staking = () => {
     const [stakedToggleOn, setStakedToggleOn] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalInfo, setModalInfo] = useState<any>(false);
+    const [selectedFilter, setSelectedFilter] = useState<any>("APY");
     const {stakeHistory} = useStaking();
+    
+
+    const handleStakedSuccess = (stakedAmount: string, apy: number, rewardRate: number) => {
+        if (!history) {
+            console.error("History is not available");
+            return;
+        }
+        const sHistory: any[] = history.map((his: StakesType) => {
+            if (his.apy === apy) {
+                return {
+                    ...his,  
+                    stakedAmount,
+                    rewardRate,
+                };
+            }
+            return his;
+        });
+        setHistory(sHistory);
+    };
 
     useEffect(() => {
         if (stakeHistory) {
+            debugger
             const sHistory: StakesType[] = initialStakingCardGroup.map((stake: StakesType) => {
                 const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
                 return selectedHistory ? selectedHistory : stake;
@@ -90,13 +111,13 @@ const Staking = () => {
                 <div className=""></div>
                 <div className="2xl:flex xl:flex lg:flex flex-row items-center justify-between md:hidden sm:hidden">
                     <div className="flex flex-row 2xl:gap-4 xl:gap-4 lg:gap-4 md:gap-0 sm:gap-0 items-center justify-between">
-                        <Dropdown menus={["APR", "Multiplier", "Earned", "Liquidity", "Fees"]} />
+                        <Dropdown menus={["APY", "Multiplier", "Earned", "Liquidity", "Fees"]} width={200} setSelected={setSelectedFilter} selected={selectedFilter} />
                         <span className="2xl:w-[200px] xl:w-[200px] lg:w-[200px] md:w-0 sm:w-0"></span>
                     </div>
                 </div>
                 <div className="w-full mt-[60px] block 2xl:hidden xl:hidden lg:hidden md:block sm:block">
                     <div className="flex flex-row 2xl:gap-4 xl:gap-4 lg:gap-4 md:gap-0 sm:gap-0 items-center justify-between">
-                        <Dropdown menus={["APR", "Multiplier", "Earned", "Liquidity", "Fees"]} />
+                        <Dropdown menus={["APY", "Multiplier", "Earned", "Liquidity", "Fees"]} width={200} setSelected={setSelectedFilter} selected={selectedFilter} />
                         <span className="2xl:w-[200px] xl:w-[200px] lg:w-[200px] md:w-0 sm:w-0"></span>
                     </div>
                 </div>
@@ -104,7 +125,7 @@ const Staking = () => {
             <div className="grid grid-cols-1 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-[92px] 2xl:mt-4 xl:mt-4 lg:mt-4 md:mt-[92px] sm:mt-[92px]">
                 <StakingCardGroup items={history} setModalOpen={setModalOpen} setModalInfo={setModalInfo} />
             </div>
-            <StakingModal isOpen={modalOpen} onClose={() => setModalOpen(false)} info={modalInfo} />
+            <StakingModal isOpen={modalOpen} onClose={() => setModalOpen(false)} info={modalInfo} onStakedSuccess={handleStakedSuccess} />
         </div>
     );
 }

@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import "./style.css";
 import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 import useStaking from "../../../hooks/useStaking";
 import { useWallet } from "../../../context/WalletContext";
-import { REQUIRED_CHAIN_ID } from "../../../constant/wallets";
 import { toast } from "react-toastify";
-import { useReadContract } from "wagmi";
-import tokenABI from "../../../contracts/TokenA.json";
-import useContract from "../../../hooks/useContract";
 import useToken from "../../../hooks/useToken";
 import { ethers } from "ethers";
 import Spinner from "../Spinner";
+import {FaPercent} from "react-icons/fa";
+import {extaRewardRateOf} from "../../../lib/stake";
 
 type StakingModalItemType = {
     apy: number;
@@ -22,21 +20,26 @@ type StakingModalItemType = {
 interface StakingModalProps {
     isOpen: boolean;
     onClose: () => void;
-    info: StakingModalItemType | any
+    info: StakingModalItemType | any;
+    onStakedSuccess: (stakedAmount: string, apy: number, rewardRate: number) => void;
 }
 
-const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
+const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info, onStakedSuccess}) => {
     const [stakeAmount, setStakeAmount] = useState<string>("");
     const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
     const [loading, setLoading] = useState(false);
-    const {stakeToken} = useStaking();
-    const {token} = useContract();
-    const {chainId, account} = useWallet();
+    const [selectedPercent, setSelectedPercent] = useState<number>(100);
+    const [extraPercent, setExtraPercent] = useState<string>("0");
+    const {stakeToken, claimToken} = useStaking();
+    const {account} = useWallet();
     const {balanceOf} = useToken();
 
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             setStakeAmount("");
+            setSelectedPercent(100);
+            setExtraPercent("0");
+            setBtnDisabled(true);
             onClose();
         }
     };
@@ -53,6 +56,8 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
                 if(balanceInWei >= stakeAmountInWei) {
                     const staked = await stakeToken(stakeAmountInWei, info.apy);
                     if(staked) {
+                        onStakedSuccess(stakeAmount, info.apy, info.rewardRate);
+                        toast.success(`Thank you for your staking ${stakeAmount} CHRLE`);
                         setStakeAmount("");
                         onClose();
                     }
@@ -66,14 +71,50 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
             setLoading(false);
         }
     }
+    
+    const handleClaimClick = async () => {
+        try {
+            setLoading(true);
+            const claimData = await claimToken(selectedPercent, info.apy);
+            if(claimData) {
+                // toast.success(`Thank you for your restaking amount ${} CHRLE`);
+                setSelectedPercent(100);
+                setExtraPercent("0");
+                onClose();
+            }
+        } catch {
+            toast.error("Unexpected error");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    
+    const handleSelectPercent = (percent: any) => {
+        const extra = extaRewardRateOf(info.apy, percent);
+        setSelectedPercent(percent);
+        setExtraPercent(extra);
+    }
+
 
     useEffect(() => {
-        if(stakeAmount && !isNaN(Number(stakeAmount))) {
-            setBtnDisabled(false);
-        } else{
-            setBtnDisabled(true);
+        if(!info.extendPercents) {
+            if(stakeAmount && !isNaN(Number(stakeAmount))) {
+                setBtnDisabled(false);
+            } else{
+                setBtnDisabled(true);
+            }
+        } else {
+
         }
     }, [stakeAmount]);
+
+    useEffect(() => {
+        if (isOpen && info.apy && info.extendPercents) {
+            const initialExtraPercent = extaRewardRateOf(info.apy, selectedPercent);
+            setExtraPercent(initialExtraPercent);
+        }
+    }, [isOpen, info.apy, info.extendPercents, selectedPercent]);
 
     return (
         <div
@@ -87,8 +128,8 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
 
             <div className={`relative w-[361px] h-[280px] 2xl:w-[600px] xl:w-[600px] lg:w-[600px] md:w-[600px] sm:w-[361px] modal-wrapper z-10 max-w-md p-6 bg-gradient-br shadow-lg transform transition-transform duration-300`}>
                 <div className="absolute modal-wrapper inset-[1px] bg-[#1B1B1B] p-10">
-                    {/* <Dropdown menus={} /> */}
-                    {!info.extendPercents &&
+                    
+                    {!info.extendPercents ?
                         <>
                             <div className="flex items-center justify-between mb-4">
                                 <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
@@ -105,16 +146,55 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
                             <div className="mb-4">
                                 <InputField onChange={handleOnChange} value={stakeAmount} placeholder="Stake Amount" />
                             </div>
-                            <div className={`stake-button-wrapper h-[54px] mt-10 w-full relative ${btnDisabled ? "bg-[#212121]" : "bg-gradient"}`}>
-                                <div className={`stake-button-wrapper inset-[3px] absolute ${btnDisabled ? "bg-[#212121]" : "bg-white"}`}>
+                            <div className={`stake-button-wrapper h-[54px] mt-10 w-full relative ${(btnDisabled) ? "bg-[#212121]" : "bg-gradient"}`}>
+                                <div className={`stake-button-wrapper inset-[3px] absolute ${(btnDisabled) ? "bg-[#212121]" : "bg-white"}`}>
                                     <button 
-                                        className={`stake-button-wrapper flex items-center justify-center inset-[1px] transition-all duration-300 ease-in-out ${btnDisabled ? "cursor-not-allowed text-[#444444]" : "cursor-pointer text-white bg-gradient"} absolute  text-base`} 
-                                        disabled={btnDisabled}
+                                        className={`stake-button-wrapper flex items-center justify-center inset-[1px] transition-all duration-300 ease-in-out ${(btnDisabled) ? "cursor-not-allowed text-[#444444]" : "cursor-pointer text-white bg-gradient"} absolute  text-base`} 
+                                        disabled={(btnDisabled || loading)}
                                         onClick={handleStakeClick}
                                     >
                                         Stake {loading && <Spinner size={20} margin={12} />}
                                     </button>
                                 </div>
+                            </div>
+                        </>
+                        : <>
+                            <div className="flex items-center justify-between mt-4">
+                                <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
+                                    APY :
+                                </span>
+                                <span className="text-white text-base font-normal">{info.apy} days</span>
+                            </div>
+                            <div className="flex items-center justify-between mt-4">
+                                <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
+                                    Remaining :
+                                </span>
+                                <div className="flex flex-row gap-4 items-center">
+                                    <Dropdown menus={info.extendPercents} width={200} setSelected={handleSelectPercent} selected={selectedPercent} />
+                                    <FaPercent size={12} color="white" />
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-between mt-4">
+                                <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
+                                    Extra Staking Percent :
+                                </span>
+                                <div className="flex flex-row items-center">
+                                    <span className="text-white text-base font-normal mr-2">
+                                        {extraPercent}
+                                    </span>
+                                    <FaPercent size={12} color="white" />
+                                </div>
+                                
+                            </div>
+                            <div className={`stake-button-wrapper h-[54px] mt-6 w-full relative bg-gradient`}>
+                                <div className={`stake-button-wrapper inset-[3px] absolute bg-white`}>
+                                    <button 
+                                        className={`stake-button-wrapper flex items-center justify-center inset-[1px] transition-all duration-300 ease-in-out cursor-pointer text-white bg-gradient absolute  text-base`} 
+                                        onClick={handleClaimClick}
+                                    >
+                                        Claim {loading && <Spinner size={20} margin={12} />}
+                                    </button>
+                                    </div>
                             </div>
                         </>
                     }
