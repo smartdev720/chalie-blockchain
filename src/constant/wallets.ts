@@ -10,6 +10,6 @@ const getWalletSrc = (walletName: string): string | null => {
     return selectedWallet ? selectedWallet.src : null;
 }
 
-const REQUIRED_CHAIN_ID = 84532;
+const REQUIRED_CHAIN_ID = 8453;
 
 export {Wallets, getWalletSrc, REQUIRED_CHAIN_ID};

@@ -8,6 +8,12 @@
   }
 }
 
+@media (max-width: 835px) {
+  .filter-wrapper {
+    clip-path: polygon(0 7%, 3% 0, 100% 0, 100% 93%, 97% 100%, 0% 100%);
+  }
+}
+
 @media (max-width: 768px) {
   .filter-wrapper {
     clip-path: polygon(0 7%, 4% 0, 100% 0, 100% 93%, 96% 100%, 0% 100%);

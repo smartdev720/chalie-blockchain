@@ -21,6 +21,18 @@ const extendPercentsOf = (apy: number): number[] => {
     };
   
     return percentsMap[apy] || [];
+};
+
+const formatTime = (seconds: number): string => {
+    const days = Math.floor(seconds / (24 * 3600));
+    const hours = Math.floor((seconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${days.toString().padStart(2, "0")} / ${hours
+      .toString()
+      .padStart(2, "0")} : ${minutes.toString().padStart(2, "0")} : ${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
-export {isValidWithdraw, extaRewardRateOf, extendPercentsOf};
+export {isValidWithdraw, extaRewardRateOf, extendPercentsOf, formatTime};

@@ -1,7 +1,7 @@
 import React, {createContext, useEffect, useState, ReactNode} from "react";
 import { ethers } from "ethers";
 import StakingABI from "../contracts/Staking.json";
-import TokenABI from "../contracts/TokenA.json";
+import TokenABI from "../contracts/Token.json";
 import { STAKING_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS } from "../constant/contract";
 
 interface ContractContextType {
@@ -22,7 +22,6 @@ const ContractProvider: React.FC<ContractProviderProps> = ({children}) => {
     useEffect(() => {
         const initContracts = async () => {
             try {
-                debugger
                 let provider: ethers.BrowserProvider | null = null;
 
                 if(window.ethereum) {
@@ -41,7 +40,7 @@ const ContractProvider: React.FC<ContractProviderProps> = ({children}) => {
 
                 // Instantiate contract instances
                 const stakingInstance = new ethers.Contract(STAKING_CONTRACT_ADDRESS, StakingABI.abi, signer);
-                const token = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI.abi, signer);
+                const token = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI, signer);
                 setToken(token);
                 setStaking(stakingInstance);
             } catch(err) {

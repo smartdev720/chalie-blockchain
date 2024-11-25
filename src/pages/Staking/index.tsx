@@ -5,7 +5,7 @@ import Toggle from "../../components/common/Toggle";
 import Search from "../../components/common/Search";
 import Dropdown from "../../components/common/Dropdown";
 import StakingCardGroup from "../../components/common/StakingCardGroup";
-import useStaking from "../../hooks/useStaking";
+import {useStaking} from "../../context/StakingContext";
 import { StakesType } from "../../types/stakeTypes";
 import { initialStakingCardGroup } from "../../constant/staking";
 import StakingModal from "../../components/common/StakingModal";
@@ -17,32 +17,14 @@ const Staking = () => {
     const [modalInfo, setModalInfo] = useState<any>(false);
     const [selectedFilter, setSelectedFilter] = useState<any>("APY");
     const {stakeHistory} = useStaking();
-    
-
-    const handleStakedSuccess = (stakedAmount: string, apy: number, rewardRate: number) => {
-        if (!history) {
-            console.error("History is not available");
-            return;
-        }
-        const sHistory: any[] = history.map((his: StakesType) => {
-            if (his.apy === apy) {
-                return {
-                    ...his,  
-                    stakedAmount,
-                    rewardRate,
-                };
-            }
-            return his;
-        });
-        setHistory(sHistory);
-    };
 
     useEffect(() => {
         if (stakeHistory) {
-            debugger
             const sHistory: StakesType[] = initialStakingCardGroup.map((stake: StakesType) => {
                 const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
-                return selectedHistory ? selectedHistory : stake;
+                return selectedHistory 
+                    ? { ...selectedHistory, rewardRate: selectedHistory.rewardRate / 1000 }
+                    : stake;
             });
             setHistory(sHistory);
         } else {
@@ -51,12 +33,24 @@ const Staking = () => {
     }, [stakeHistory]);
 
     useEffect(() => {
-        if(stakedToggleOn) setHistory(stakeHistory);
+        if(stakedToggleOn) {
+            if (stakeHistory) {
+                const sHistory: StakesType[] = stakeHistory.map((stake: StakesType) => {
+                    const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
+                    return selectedHistory 
+                        ? { ...selectedHistory, rewardRate: selectedHistory.rewardRate / 1000 }
+                        : stake;
+                });
+                setHistory(sHistory);
+            }
+        }
         else {
             if (stakeHistory) {
                 const sHistory: StakesType[] = initialStakingCardGroup.map((stake: StakesType) => {
                     const selectedHistory = stakeHistory.find((history: StakesType) => history.apy === stake.apy);
-                    return selectedHistory ? selectedHistory : stake;
+                    return selectedHistory 
+                        ? { ...selectedHistory, rewardRate: selectedHistory.rewardRate / 1000 }
+                        : stake;
                 });
                 setHistory(sHistory);
             } else {
@@ -122,10 +116,10 @@ const Staking = () => {
                     </div>
                 </div>
             </div>
-            <div className="grid grid-cols-1 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-[92px] 2xl:mt-4 xl:mt-4 lg:mt-4 md:mt-[92px] sm:mt-[92px]">
+            <div className="grid grid-cols-1 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-[92px] 2xl:mt-4 xl:mt-4 lg:mt-4 md:mt-[92px] sm:mt-[92px] h-[140vh] 2xl:h-[98vh] xl:h-[98vh] lg:h-[98vh] md:h-[98vh] sm:h-[140vh] overflow-x-hidden overflow-y-auto p-4">
                 <StakingCardGroup items={history} setModalOpen={setModalOpen} setModalInfo={setModalInfo} />
             </div>
-            <StakingModal isOpen={modalOpen} onClose={() => setModalOpen(false)} info={modalInfo} onStakedSuccess={handleStakedSuccess} />
+            <StakingModal isOpen={modalOpen} onClose={() => setModalOpen(false)} info={modalInfo} />
         </div>
     );
 }

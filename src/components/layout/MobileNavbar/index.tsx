@@ -8,17 +8,22 @@ import "./style.css";
 interface MobileNavBarProps {
     isOpen: boolean;
     setWeb3Modal: (value: boolean) => void;
+    setOpen: (value: boolean) => void;
+    setNavIcon: (value: boolean) => void;
 }
 
 const style = {
     link: "text-base font-normal p-2 z-30 hover:bg-gradient-to-r hover:from-[#ce89ca] hover:via-[#5885BF] hover:via-[#7258DF] hover:to-[#75eea3] hover:bg-clip-text hover:text-transparent transition-all duration-300 ease-in-out "
 };
 
-const MobileNavBar: React.FC<MobileNavBarProps> = ({isOpen, setWeb3Modal}) => {
+const MobileNavBar: React.FC<MobileNavBarProps> = ({isOpen, setWeb3Modal, setOpen, setNavIcon}) => {
     const [active, setActive] = useState<string>("swap");
     const {account, disconnectWallet} = useWallet();
-
-    const handleActive = (value: string) => setActive(value);
+    const handleActive = (value: string) => {
+        setActive(value);
+        setNavIcon(false);
+        setOpen(false);
+    };
     
     const slideIn = useSpring({
         transform: isOpen ? 'translateX(0%)' : 'translateX(100%)',
