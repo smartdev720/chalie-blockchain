@@ -5,7 +5,7 @@ interface DropdownProps {
   menus: any[];
   width: number;
   setSelected: (value: any) => void;
-  selected: any
+  selected: any;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ menus, width, setSelected, selected }) => {
@@ -17,9 +17,9 @@ const Dropdown: React.FC<DropdownProps> = ({ menus, width, setSelected, selected
   };
 
   return (
-    <div className={`w-full 2xl:w-[${width}px] xl:w-[${width}px] lg:w-[${width}px] md:w-full sm:w-full relative`}>
+    <div className={`w-full 2xl:w-[${width}px] xl:w-[${width}px] lg:w-[${width}px] md:w-[${width}px] sm:w-[${width}px] relative`}>
       <div
-        className="dropdown-wrapper cursor-pointer relative bg-[#2C2C2C] w-full h-[36px]"
+        className={`dropdown-wrapper cursor-pointer relative bg-[#2C2C2C] h-[36px]`}
         onClick={() => setOpen(!open)}
       >
         <div className="inset-[1px] dropdown-wrapper absolute flex items-center justify-between bg-[#212121] px-4">

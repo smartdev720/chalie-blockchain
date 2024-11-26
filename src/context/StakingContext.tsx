@@ -39,6 +39,7 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
     const getStakeHistory = async () => {
         try {
             if(staking) {
+                debugger;
                 const stakesHistory = await staking.getMyStakedHistory();
                 if(stakesHistory) {
                     const formattedHistory: StakesType[] = stakesHistory.map((stake: StakesType) => {
@@ -78,7 +79,6 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
         try {
             if (!staking || !token) throw new Error("Contract not initialized");
             if(chainId === REQUIRED_CHAIN_ID) {
-    
                 const approved = await ensureTokenApprove(amount);
                 if(approved) {
                     const tx = await staking.stake(amount, lockPeriod);

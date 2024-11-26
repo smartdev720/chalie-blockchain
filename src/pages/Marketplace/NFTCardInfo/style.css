@@ -1,0 +1,25 @@
+.put-sale-wrapper {
+    clip-path: polygon(0 25%, 6% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.place-bid-wrapper {
+    clip-path: polygon(0 0, 0 0, 100% 0, 100% 75%, 94% 100%, 0% 100%);
+}
+
+.marketplace-card-attributes-wrapper {
+    clip-path: polygon(0 4%, 4% 0, 100% 0, 100% 96%, 96% 100%, 0% 100%);
+}
+
+@media (max-width: 768px) {
+    .put-sale-wrapper {
+        clip-path: polygon(0 25%, 10% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);
+    }
+
+    .place-bid-wrapper {
+        clip-path: polygon(0 0, 0 0, 100% 0, 100% 75%, 90% 100%, 0% 100%);
+    }
+
+    .marketplace-card-attributes-wrapper {
+        clip-path: polygon(0 4%, 6% 0, 100% 0, 100% 96%, 94% 100%, 0% 100%);
+    }
+}

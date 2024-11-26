@@ -65,6 +65,7 @@ const StakingCardGroup: React.FC<StakingCardProps> = ({ items, setModalOpen, set
     
       useEffect(() => {
         if (items) {
+            debugger;
           const initialTimes: { [key: number]: number } = {};
           items.forEach((item, index) => {
             const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -135,7 +136,7 @@ const StakingCardGroup: React.FC<StakingCardProps> = ({ items, setModalOpen, set
                                             </div>
                                             <div className="flex items-center justify-between mb-1">
                                                 <span className="text-[#747474] text-base font-normal">Harvest Lockup:</span>
-                                                <span className="text-white text-base font-normal">{item.apy / 86400} days</span>
+                                                <span className="text-white text-base font-normal">{item.apy} days</span>
                                             </div>
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="tracking-[-0.052em] text-base font-semibold gradient-text">

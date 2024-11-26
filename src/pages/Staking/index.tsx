@@ -105,7 +105,7 @@ const Staking = () => {
                 <div className=""></div>
                 <div className="2xl:flex xl:flex lg:flex flex-row items-center justify-between md:hidden sm:hidden">
                     <div className="flex flex-row 2xl:gap-4 xl:gap-4 lg:gap-4 md:gap-0 sm:gap-0 items-center justify-between">
-                        <Dropdown menus={["APY", "Multiplier", "Earned", "Liquidity", "Fees"]} width={200} setSelected={setSelectedFilter} selected={selectedFilter} />
+                        <Dropdown menus={["APY"]} width={200} setSelected={setSelectedFilter} selected={selectedFilter} />
                         <span className="2xl:w-[200px] xl:w-[200px] lg:w-[200px] md:w-0 sm:w-0"></span>
                     </div>
                 </div>

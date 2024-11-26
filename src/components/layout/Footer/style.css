@@ -19,3 +19,9 @@
     clip-path: polygon(0 20%, 3% 0, 100% 0, 100% 80%, 97% 100%, 0% 100%);
   }
 }
+
+@media (max-width: 465px) {
+  .footer-wrapper {
+    clip-path: polygon(0 20%, 3% 0, 100% 0, 100% 88%, 97% 100%, 0% 100%);
+  }
+}

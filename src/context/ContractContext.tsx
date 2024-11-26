@@ -40,7 +40,7 @@ const ContractProvider: React.FC<ContractProviderProps> = ({children}) => {
 
                 // Instantiate contract instances
                 const stakingInstance = new ethers.Contract(STAKING_CONTRACT_ADDRESS, StakingABI.abi, signer);
-                const token = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI, signer);
+                const token = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI.abi, signer);
                 setToken(token);
                 setStaking(stakingInstance);
             } catch(err) {

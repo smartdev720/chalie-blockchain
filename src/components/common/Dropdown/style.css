@@ -10,6 +10,12 @@
 
 @media (max-width: 768px) {
   .dropdown-wrapper {
-    clip-path: polygon(0 25%, 2% 0, 100% 0, 100% 75%, 98% 100%, 0% 100%);
+    clip-path: polygon(0 25%, 6% 0, 100% 0, 100% 75%, 94% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 395px) {
+  .dropdown-wrapper {
+    clip-path: polygon(0 25%, 7% 0, 100% 0, 100% 75%, 93% 100%, 0% 100%);
   }
 }

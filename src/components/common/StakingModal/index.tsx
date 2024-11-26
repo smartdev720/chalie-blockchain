@@ -141,7 +141,8 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
                                 <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
                                     Harvest Lockup :
                                 </span>
-                                <span className="text-white text-base font-normal">{info.apy / 86400} days</span>
+                                {/* 86400 */}
+                                <span className="text-white text-base font-normal">{info.apy} days</span>
                             </div>
                             <div className="mb-4">
                                 <InputField onChange={handleOnChange} value={stakeAmount} placeholder="Stake Amount" disabled={loading} />

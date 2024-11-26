@@ -68,7 +68,7 @@ const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (isConnected) {
-        network.switchChain({ chainId: 8453 });
+        network.switchChain({ chainId: 84532 });
     }
 }, [isConnected]);
 

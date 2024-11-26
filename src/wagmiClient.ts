@@ -43,7 +43,7 @@ const wagmiConfig = createConfig({
     connectors,
     transports: {
       [base.id]: http(),
-      // [customChain.id]: http(),
+      [customChain.id]: http(),
     },
     ssr: true
 });

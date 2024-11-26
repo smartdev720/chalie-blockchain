@@ -17,6 +17,7 @@ const Web3Modal: React.FC<Web3ModalProps> = ({web3modal, setWeb3Modal}) => {
 
     const handleConnectWallet = async () => {
         try {
+            debugger;
             if(selectedWallet) {
                 connectWallet(selectedWallet);
             }

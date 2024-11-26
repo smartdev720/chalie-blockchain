@@ -35,10 +35,9 @@ const useToken = () => {
                 toast.error("Please change your current chain");
             }
         } catch(error: any) {
+            console.log(error);
             if(error.reason) {
                 toast.error(error.reason);
-            } else {
-                toast.error("An unexpected error occurred. Check the console for details.");
             }
         } finally {
             setLoading(false);

@@ -1,0 +1,58 @@
+.put-sale-modal-wrapper {
+  clip-path: polygon(0 2%, 2% 0, 100% 0, 100% 98%, 98% 100%, 0% 100%);
+}
+
+.put-sale-modal-nft-title-wrapper {
+  clip-path: polygon(0 15%, 2% 0, 100% 0, 100% 85%, 98% 100%, 0% 100%);
+}
+
+.put-sale-modal-choose-coin-wrapper {
+  clip-path: polygon(0 11%, 2% 0, 100% 0, 100% 89%, 98% 100%, 0% 100%);
+}
+
+.put-sale-item-price-wrapper {
+  clip-path: polygon(0 7%, 2% 0, 100% 0, 100% 93%, 98% 100%, 0% 100%);
+}
+
+.put-sale-button-wrapper {
+  clip-path: polygon(0 25%, 2% 0, 100% 0, 100% 75%, 98% 100%, 0% 100%);
+}
+
+.put-sale-item-price-header-wrapper {
+  clip-path: polygon(0 34%, 2% 0, 100% 0, 100% 66%, 98% 100%, 0% 100%);
+}
+
+@media (max-width: 650px) {
+  .put-sale-modal-wrapper {
+    clip-path: polygon(0 3%, 5% 0, 100% 0, 100% 97%, 95% 100%, 0% 100%);
+  }
+
+  .put-sale-modal-nft-title-wrapper {
+    clip-path: polygon(0 15%, 4% 0, 100% 0, 100% 85%, 96% 100%, 0% 100%);
+  }
+
+  .put-sale-modal-choose-coin-wrapper {
+    clip-path: polygon(0 11%, 4% 0, 100% 0, 100% 89%, 96% 100%, 0% 100%);
+  }
+
+  .put-sale-item-price-wrapper {
+    clip-path: polygon(0 7%, 4% 0, 100% 0, 100% 93%, 96% 100%, 0% 100%);
+  }
+
+  .put-sale-button-wrapper {
+    clip-path: polygon(0 34%, 6% 0, 100% 0, 100% 66%, 94% 100%, 0% 100%);
+  }
+
+  .put-sale-item-price-header-wrapper {
+    clip-path: polygon(0 34%, 4% 0, 100% 0, 100% 66%, 96% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 350px) {
+  .put-sale-modal-wrapper {
+    height: 713px !important;
+  }
+  .put-sale-item-price-wrapper {
+    height: 250px !important;
+  }
+}

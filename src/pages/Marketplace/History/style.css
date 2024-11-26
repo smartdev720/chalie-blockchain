@@ -1,0 +1,13 @@
+.marketplace-history-wrapper {
+  clip-path: polygon(0 2%, 2% 0, 100% 0, 100% 98%, 98% 100%, 0% 100%);
+}
+
+.marketplace-history-wrapper thead th {
+  border-bottom: 1px solid #747474;
+}
+
+@media (max-width: 768px) {
+  .marketplace-history-wrapper {
+    clip-path: polygon(0 2%, 4% 0, 100% 0, 100% 98%, 96% 100%, 0% 100%);
+  }
+}
