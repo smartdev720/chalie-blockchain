@@ -1,11 +1,11 @@
-import { http, createConfig } from "wagmi";
+import { http} from "wagmi";
 import { base, Chain } from "wagmi/chains";
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
-import {rainbowWallet, metaMaskWallet, trustWallet, bitgetWallet, okxWallet} from "@rainbow-me/rainbowkit/wallets";
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import {metaMaskWallet, trustWallet, bitgetWallet, okxWallet} from "@rainbow-me/rainbowkit/wallets";
 
 const projectId = '333d74634b970c7e1d46fc856f2aa167';
 
-const customChain: Chain = {
+export const customChain: Chain = {
   id: 84532,
   name: 'Base Sepolia',
   rpcUrls: {
@@ -25,22 +25,29 @@ const customChain: Chain = {
   }
 };
 
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: 'Suggested',
-      wallets: [ metaMaskWallet, trustWallet, bitgetWallet, okxWallet, rainbowWallet],
-    },
-  ],
-  {
-    appName: "Charlie_blockchain",
-    projectId
-  }
-)
+// const connectors = connectorsForWallets(
+//   [
+//     {
+//       groupName: 'Suggested',
+//       wallets: [ ],
+//     },
+//   ],
+//   {
+//     appName: "Charlie_blockchain",
+//     projectId
+//   }
+// )
 
-const wagmiConfig = createConfig({
+const wagmiConfig = getDefaultConfig({
+    appName: "Charlie_blockchain",
+    projectId,
+    wallets: [
+      {
+        groupName: 'Recommended',
+        wallets: [metaMaskWallet, trustWallet, bitgetWallet, okxWallet],
+      },
+    ],
     chains: [customChain],
-    connectors,
     transports: {
       // [base.id]: http(),
       [customChain.id]: http(),

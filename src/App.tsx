@@ -5,7 +5,7 @@ import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
 import Web3Modal from './components/common/Web3Modal';
 import { WagmiProvider } from 'wagmi';
-import wagmiConfig from './wagmiClient';
+import wagmiConfig, { customChain } from './wagmiClient';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WalletProvider } from './context/WalletContext';
 import {RainbowKitProvider, darkTheme} from "@rainbow-me/rainbowkit";
@@ -33,7 +33,7 @@ function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={darkTheme()}>
+        <RainbowKitProvider theme={darkTheme()} initialChain={customChain}>
           <WalletProvider>
             <ContractProvider>
               <StakingProvider>
