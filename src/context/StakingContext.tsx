@@ -32,7 +32,7 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
     const [stakeHistory, setStakeHistory] = useState<StakesType[] | null>(null);
 
     const {staking, token} = useContract();
-    const {chainId} = useWallet();
+    const {chainId, isDisconnected} = useWallet();
 
     const {ensureTokenApprove} = useToken();
 
@@ -47,9 +47,6 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
                         const withdrawAmountEth = ethers.formatUnits(stake.withdrawAmount, 18); // Convert Wei to Ether
                         const rewardAmountEth = ethers.formatUnits(stake.rewardAmount, 18); // Convert Wei to Ether
                         
-                        // Format the Unix timestamp into a readable date string
-                        // const startDate = new Date(Number(stake.start) * 1000); // Convert seconds to milliseconds
-        
                         return {
                             stakedAmount: parseFloat(stakedAmountEth), // Convert string to number
                             withdrawAmount: parseFloat(withdrawAmountEth), // Convert string to number
@@ -90,6 +87,7 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
             }
             return false;
         } catch(error: any) {
+            console.error(error);
             if (error.reason) {
                 toast.error(error.reason);
             }
@@ -183,6 +181,12 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
             return false;
         }
     }
+
+    useEffect(() => {
+        if(isDisconnected) {
+            setStakeHistory(null);
+        }
+    }, [isDisconnected])
 
     useEffect(() => {
         if(staking) {

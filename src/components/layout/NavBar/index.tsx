@@ -43,9 +43,9 @@ const NavBar: React.FC<NavBarProps> = ({
       {/* Desktop */}
       <nav className="basis-5/6 nav-wrapper relative h-[60px] bg-[#444444]">
         <div className="flex items-center nav-wrapper justify-between inset-[1px] absolute bg-[#1C1C1C] px-5">
-          <div className="flex flex-row items-center justify-center gap-20">
+          <div className="flex flex-row items-center justify-center gap-20 2xl:gap-20 xl:gap-20 lg:gap-20 md:gap-10">
             <h3 className="gradient-text font-semibold text-2xl">Logo</h3>
-            <div className="hidden 2xl:block xl:block lg:block md:hidden sm:hidden">
+            <div className="hidden 2xl:block xl:block lg:block md:block sm:hidden">
               <div className="flex flex-row items-center gap-20">
                 <Link
                   to="/swap"

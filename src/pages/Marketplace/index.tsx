@@ -4,8 +4,11 @@ import NFTCard from "../../components/common/NFTCard";
 const Marketplace = () => {
     return (
         <div className="w-full mt-20">
+            <div className="flex items-center justify-center">
+            <h1 className="text-5xl text-white text-center font-semibold h-[110vh]">It will be coming soon</h1>
+            </div>
             {/* Title bar */}
-            <div className="flex flex-col items-center justify-center">
+            {/* <div className="flex flex-col items-center justify-center">
                 <h1 className="text-5xl text-white text-center font-semibold">Marketplace</h1>
                 <p className="text-base font-normal text-white/50 mt-2 text-center">Lorem ipsum dolor sit amet consectetur</p>
             </div>
@@ -20,7 +23,7 @@ const Marketplace = () => {
                 <NFTCard />
                 <NFTCard />
                 <NFTCard />
-            </div>
+            </div> */}
         </div>
     );
 }

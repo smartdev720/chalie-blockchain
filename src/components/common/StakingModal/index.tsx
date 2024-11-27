@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./style.css";
-import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 import {useStaking} from "../../../context/StakingContext";
 import { useWallet } from "../../../context/WalletContext";
@@ -10,6 +9,7 @@ import { ethers } from "ethers";
 import Spinner from "../Spinner";
 import {FaPercent} from "react-icons/fa";
 import {extaRewardRateOf} from "../../../lib/stake";
+import SpecialDropdown from "../SpecialDropdown";
 
 type StakingModalItemType = {
     apy: number;
@@ -171,8 +171,8 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
                                 <span className="tracking-[-0.052em] text-base font-semibold gradient-text">
                                     Remaining :
                                 </span>
-                                <div className="flex flex-row gap-4 items-center">
-                                    <Dropdown menus={info.extendPercents} width={200} setSelected={handleSelectPercent} selected={selectedPercent} />
+                                <div className="flex flex-row gap-4 items-center w-[140px] 2xl:w-[200px] xl:w-[200px] lg:w-[200px] md:w-[200px] sm:w-[140px]">
+                                    <SpecialDropdown menus={info.extendPercents} width={200} setSelected={handleSelectPercent} selected={selectedPercent} />
                                     <FaPercent size={12} color="white" />
                                 </div>
                             </div>

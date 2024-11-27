@@ -8,6 +8,7 @@ interface WalletContextProps {
   isConnected: boolean;
   isWalletInstalled: (walletName: string) => boolean;
   chainId: number | null | undefined;
+  isDisconnected: boolean;
 }
 
 const WalletContext = createContext<WalletContextProps | undefined>(undefined);
@@ -27,7 +28,7 @@ interface WalletProviderProps {
 const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
-  const { address, isConnected, chainId } = useAccount();
+  const { address, isConnected, chainId, isDisconnected } = useAccount();
   const network = useSwitchChain();
 
 
@@ -81,6 +82,7 @@ const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         isConnected,
         isWalletInstalled,
         chainId: isConnected ? chainId : null,
+        isDisconnected,
       }}
     >
       {children}

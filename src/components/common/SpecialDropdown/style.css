@@ -1,0 +1,15 @@
+.special-dropdown-wrapper {
+  clip-path: polygon(0 25%, 7% 0, 100% 0, 100% 75%, 93% 100%, 0% 100%);
+}
+
+@media (max-width: 650px) {
+  .special-dropdown-wrapper {
+    clip-path: polygon(0 25%, 8% 0, 100% 0, 100% 75%, 92% 100%, 0% 100%);
+  }
+}
+
+@media (max-width: 395px) {
+  .special-dropdown-wrapper {
+    clip-path: polygon(0 25%, 8% 0, 100% 0, 100% 75%, 92% 100%, 0% 100%);
+  }
+}

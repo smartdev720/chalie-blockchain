@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./style.css";
 
-interface DropdownProps {
+interface SpecialDropdownProps {
   menus: any[];
   width: number;
   setSelected: (value: any) => void;
   selected: any;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ menus, width, setSelected, selected }) => {
+const SpecialDropdown: React.FC<SpecialDropdownProps> = ({ menus, width, setSelected, selected }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleMenuClick = (menu: any) => {
@@ -19,10 +19,10 @@ const Dropdown: React.FC<DropdownProps> = ({ menus, width, setSelected, selected
   return (
     <div className={`w-full 2xl:w-[${width}px] xl:w-[${width}px] lg:w-[${width}px] md:w-full sm:w-full relative`}>
       <div
-        className={`dropdown-wrapper cursor-pointer relative bg-[#2C2C2C] h-[36px]`}
+        className={`special-dropdown-wrapper cursor-pointer relative bg-[#2C2C2C] h-[36px]`}
         onClick={() => setOpen(!open)}
       >
-        <div className="inset-[1px] dropdown-wrapper absolute flex items-center justify-between bg-[#212121] px-4">
+        <div className="inset-[1px] special-dropdown-wrapper absolute flex items-center justify-between bg-[#212121] px-4">
           <span className="text-base font-normal text-white">{selected}</span> {/* Display the selected menu */}
           <img
             src="./assets/narrow.svg"
@@ -50,4 +50,4 @@ const Dropdown: React.FC<DropdownProps> = ({ menus, width, setSelected, selected
   );
 };
 
-export default Dropdown;
+export default SpecialDropdown;

@@ -2,6 +2,12 @@
   clip-path: polygon(0 25%, 5% 0, 100% 0, 100% 75%, 95% 100%, 0% 100%);
 }
 
+@media (max-width: 1024px) {
+  .toggle-wrapper {
+    clip-path: polygon(0 22%, 1% 0, 100% 0, 100% 78%, 99% 100%, 0% 100%);
+  }
+}
+
 @media (max-width: 835px) {
   .toggle-wrapper {
     clip-path: polygon(0 25%, 2% 0, 100% 0, 100% 75%, 98% 100%, 0% 100%);
