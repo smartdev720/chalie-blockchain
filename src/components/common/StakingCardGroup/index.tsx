@@ -65,7 +65,6 @@ const StakingCardGroup: React.FC<StakingCardProps> = ({ items, setModalOpen, set
     
       useEffect(() => {
         if (items) {
-            debugger;
           const initialTimes: { [key: number]: number } = {};
           items.forEach((item, index) => {
             const currentTimestamp = Math.floor(Date.now() / 1000);

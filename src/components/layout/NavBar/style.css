@@ -6,6 +6,42 @@
   clip-path: polygon(0 0, 0 0, 100% 0, 100% 83%, 95% 100%, 0% 100%);
 }
 
+.connect-wrapper button {
+  color: white !important;
+  clip-path: polygon(0 0, 0 0, 100% 0, 100% 83%, 95% 100%, 0% 100%) !important;
+  position: absolute !important;
+  top: 1px !important;
+  left: 1px !important;
+  right: 1px !important;
+  bottom: 1px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  background: linear-gradient(to right,
+      #ce89ca,
+      #5885bf,
+      #7258df,
+      #75eea3) !important;
+  transition: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  height: auto !important;
+  font-size: 16px !important;
+  font-weight: normal !important;
+  font-family: "Montserrat" !important;
+}
+
+.connect-wrapper button div {
+  border: none !important;
+  background: none !important;
+}
+
+.connect-wrapper button:hover {
+  transform: scale(1, 1) !important;
+}
+
 @media (max-width: 1024px) {
   .nav-wrapper {
     clip-path: polygon(0 20%, 2% 0, 100% 0, 100% 100%, 100% 100%, 0% 100%);

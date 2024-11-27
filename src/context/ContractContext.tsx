@@ -3,6 +3,11 @@ import { ethers } from "ethers";
 import StakingABI from "../contracts/Staking.json";
 import TokenABI from "../contracts/Token.json";
 import { STAKING_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS } from "../constant/contract";
+import { useAccount, useClient} from "wagmi";
+import { getContract } from "viem";
+import wagmiClient from "../wagmiClient";
+import { REQUIRED_CHAIN_ID } from "../constant/wallets";
+import { toast } from "react-toastify";
 
 interface ContractContextType {
     staking: ethers.Contract | null;
@@ -19,37 +24,47 @@ const ContractProvider: React.FC<ContractProviderProps> = ({children}) => {
     const [staking, setStaking] = useState<ethers.Contract | null>(null);
     const [token, setToken] = useState<ethers.Contract | null>(null);
 
+    const { address, isConnected, chainId } = useAccount();
+
     useEffect(() => {
         const initContracts = async () => {
             try {
-                let provider: ethers.BrowserProvider | null = null;
-
-                if(window.ethereum) {
-                    provider = new ethers.BrowserProvider(window.ethereum);
-                } else if(window.bitkeep) {
-                    provider = new ethers.BrowserProvider(window.bitkeep);
-                } else if(window.okxwallet) {
-                    provider = new ethers.BrowserProvider(window.okxwallet);
-                }
-
+                debugger;
+                if (!isConnected || !address) {
+                    return;
+                  }
+          
+                  if (chainId !== REQUIRED_CHAIN_ID) {
+                    return;
+                  }
+                  let provider = null;
+                  if (window.ethereum) {
+                    provider = new ethers.BrowserProvider(window.ethereum); // MetaMask, Trust Wallet, etc.
+                  } else if (window.bitkeep) {
+                    provider = new ethers.BrowserProvider(window.bitkeep); // BitKeep wallet
+                  } else if (window.okxwallet) {
+                    provider = new ethers.BrowserProvider(window.okxwallet); // OKX wallet
+                  } else {
+                    throw new Error("No compatible wallet found");
+                  }
                 if(!provider) {
-                    throw new Error("No compatible Ethereum wallet found");
+                    throw new Error("No compatible wallet found");
                 }
-
                 const signer = await provider.getSigner();
-
-                // Instantiate contract instances
                 const stakingInstance = new ethers.Contract(STAKING_CONTRACT_ADDRESS, StakingABI.abi, signer);
-                const token = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI.abi, signer);
+                const tokenInstance =  new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenABI.abi, signer);
+        
+                console.log("Staking Contract:", stakingInstance);
+                console.log("Token Contract:", tokenInstance);
                 setToken(token);
                 setStaking(stakingInstance);
             } catch(err) {
-                console.error("Error initializing contracts: ", err);
+                toast.warning("Rejected");
             }
         }
 
         initContracts();
-    }, []);
+    }, [isConnected, chainId]);
 
     return (
         <ContractContext.Provider value={{staking, token}}>

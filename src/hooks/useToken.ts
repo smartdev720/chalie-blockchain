@@ -12,7 +12,9 @@ const useToken = () => {
     const {chainId} = useWallet();
 
     const ensureTokenApprove = async (amount: bigint): Promise<boolean | null | undefined> => {
-        if(!token) throw new Error("Invalid Token Approve");
+        if(!token) {
+            return false;
+        }
         if(chainId === REQUIRED_CHAIN_ID) {
             setLoading(true);
             const txApprove = await token.approve(STAKING_CONTRACT_ADDRESS, amount); 
@@ -21,27 +23,23 @@ const useToken = () => {
         } else {
             toast.error("Please change your current chain");
         }
+        return false;
     }
     
     const balanceOf = async (address: string): Promise<string | null | undefined> => {
-        try {
-            if(!token) throw new Error("Invalid token contract");
-            if(chainId === REQUIRED_CHAIN_ID) {
-                setLoading(true);
-                const balanceInBigInt = await token.balanceOf(address);
-                const balanceInEth = ethers.formatUnits(balanceInBigInt, 18);
-                return balanceInEth;
-            } else {
-                toast.error("Please change your current chain");
-            }
-        } catch(error: any) {
-            console.log(error);
-            if(error.reason) {
-                toast.error(error.reason);
-            }
-        } finally {
-            setLoading(false);
+        if(!token) {
+            toast.error("Please change your current chain");
+            return null;
         }
+        if(chainId === REQUIRED_CHAIN_ID) {
+            setLoading(true);
+            const balanceInBigInt = await token.balanceOf(address);
+            const balanceInEth = ethers.formatUnits(balanceInBigInt, 18);
+            return balanceInEth;
+        } else {
+            toast.error("Please change your current chain");
+        }
+        return null;
     }
 
     return {loading, balanceOf, ensureTokenApprove}

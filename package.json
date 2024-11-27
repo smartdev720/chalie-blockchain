@@ -15,6 +15,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@wagmi/connectors": "^5.4.0",
+    "@wagmi/core": "^2.15.0",
     "@walletconnect/jsonrpc-ws-connection": "^1.0.14",
     "ethers": "^6.13.4",
     "postcss": "^8.4.49",

@@ -50,6 +50,7 @@ const StakingModal: React.FC<StakingModalProps> = ({isOpen, onClose, info}) => {
 
     const handleStakeClick = async () => {
         try {
+            debugger;
             if(account) {
                 setLoading(true);
                 const balance = await balanceOf(account);

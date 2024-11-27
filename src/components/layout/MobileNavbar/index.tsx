@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import { Link } from "react-router-dom";
-import { WalletButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useWallet } from "../../../context/WalletContext";
 import "./style.css";
 
@@ -18,7 +18,6 @@ const style = {
 
 const MobileNavBar: React.FC<MobileNavBarProps> = ({isOpen, setWeb3Modal, setOpen, setNavIcon}) => {
     const [active, setActive] = useState<string>("swap");
-    const {account, disconnectWallet} = useWallet();
     const handleActive = (value: string) => {
         setActive(value);
         setNavIcon(false);
@@ -52,21 +51,7 @@ const MobileNavBar: React.FC<MobileNavBarProps> = ({isOpen, setWeb3Modal, setOpe
                     <div className="flex items-center justify-center p-2 w-full">
                         <div className="connect-wrapper w-full h-[60px] bg-gradient relative">
                             <div className="connect-wrapper inset-[3px] bg-white absolute">
-                                <WalletButton.Custom wallet="rainbow">
-                                {({ ready, connect }) => {
-                                    return (
-                                        <button className="text-white connect-wrapper inset-[1px] absolute bg-gradient flex items-center justify-center" onClick={() => {
-                                            if(account) {
-                                                disconnectWallet();
-                                            } else {
-                                                setWeb3Modal(true);
-                                            }
-                                        }}>
-                                            {account ? `${account.slice(0, 20)}.....` : "Connect wallet"}
-                                        </button>
-                                    )
-                                }}
-                                </WalletButton.Custom>
+                                <ConnectButton label="Connect wallet" accountStatus="address" showBalance={false} />
                             </div>
                         </div>
                     </div>

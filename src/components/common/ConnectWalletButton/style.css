@@ -1,3 +1,27 @@
 .connect-wallet-wrapper {
   clip-path: polygon(0 26%, 5% 0, 100% 0, 100% 74%, 95% 100%, 0% 100%);
 }
+
+.connect-wallet-wrapper button {
+  color: white !important;
+  clip-path: polygon(0 26%,
+      5% 0,
+      100% 0,
+      100% 74%,
+      95% 100%,
+      0% 100%) !important;
+  position: absolute !important;
+  top: 1px !important;
+  left: 1px !important;
+  right: 1px !important;
+  bottom: 1px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  background: linear-gradient(to right,
+      #ce89ca,
+      #5885bf,
+      #7258df,
+      #75eea3) !important;
+}

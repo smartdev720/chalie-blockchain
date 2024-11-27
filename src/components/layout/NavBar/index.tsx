@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./style.css";
 import { useWallet } from "../../../context/WalletContext";
-import { WalletButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton, WalletButton } from "@rainbow-me/rainbowkit";
 
 const style = {
   link: "text-base font-normal z-10 hover:bg-gradient-to-r hover:from-[#ce89ca] hover:via-[#5885BF] hover:via-[#7258DF] hover:to-[#75eea3] hover:bg-clip-text hover:text-transparent transition-all duration-300 ease-in-out "
@@ -83,24 +83,19 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="connect-wrapper w-full h-[60px] bg-gradient relative">
           <div className="connect-wrapper inset-[3px] bg-white absolute">
             <div className="hidden 2xl:block xl:block lg:block md:block sm:hidden">
-              <WalletButton.Custom wallet="rainbow">
-                {({ ready, connect }) => {
-                  return (
-                    <button
-                      className="text-white connect-wrapper inset-[1px] absolute bg-gradient flex items-center justify-center"
-                      onClick={() => {
-                        if (account) {
-                          disconnectWallet();
-                        } else {
-                          setWeb3Modal(true);
-                        }
-                      }}
-                    >
-                      {account ? `${account.slice(0, 20)}.....` : "Connect wallet"}
-                    </button>
-                  );
+            <ConnectButton label="Connect wallet" accountStatus="address" showBalance={false} />
+              {/* <button
+                className="text-white connect-wrapper inset-[1px] absolute bg-gradient flex items-center justify-center"
+                onClick={() => {
+                  if (account) {
+                    disconnectWallet();
+                  } else {
+                    setWeb3Modal(true);
+                  }
                 }}
-              </WalletButton.Custom>
+              >
+                {account ? `${account.slice(0, 20)}.....` : "Connect wallet"}
+              </button> */}
             </div>
             <div className="block 2xl:hidden xl:hidden lg:hidden md:hidden sm:block">
               <button className="text-white connect-wrapper inset-[1px] absolute bg-gradient flex items-center justify-center">

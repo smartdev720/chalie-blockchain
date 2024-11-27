@@ -8,7 +8,7 @@ import { WagmiProvider } from 'wagmi';
 import wagmiConfig from './wagmiClient';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WalletProvider } from './context/WalletContext';
-import {RainbowKitProvider} from "@rainbow-me/rainbowkit";
+import {RainbowKitProvider, darkTheme} from "@rainbow-me/rainbowkit";
 import MobileNavBar from './components/layout/MobileNavbar';
 import { ContractProvider } from './context/ContractContext';
 import { StakingProvider } from './context/StakingContext';
@@ -16,6 +16,7 @@ import RouterComponent from './routes';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
+import '@rainbow-me/rainbowkit/styles.css';
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,7 @@ function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider theme={darkTheme()}>
           <WalletProvider>
             <ContractProvider>
               <StakingProvider>

@@ -39,7 +39,6 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({children}) => {
     const getStakeHistory = async () => {
         try {
             if(staking) {
-                debugger;
                 const stakesHistory = await staking.getMyStakedHistory();
                 if(stakesHistory) {
                     const formattedHistory: StakesType[] = stakesHistory.map((stake: StakesType) => {

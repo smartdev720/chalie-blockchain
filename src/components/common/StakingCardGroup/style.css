@@ -44,7 +44,14 @@
   left: 1px;
   right: 1px;
   bottom: 1px;
-  clip-path: polygon(0 25%, 4% 0, 100% 0, 100% 75%, 96% 100%, 0% 100%);
+  clip-path: polygon(
+    0 25%,
+    4% 0,
+    100% 0,
+    100% 75%,
+    96% 100%,
+    0% 100%
+  ) !important;
 }
 
 .staking-card-container .info-container {
@@ -58,6 +65,10 @@
 
 .blur-effect-hover {
   filter: blur(8px);
+}
+
+.staking-card-wrapper .connect-wallet-wrapper {
+  clip-path: polygon(0 25%, 4% 0, 100% 0, 100% 75%, 96% 100%, 0% 100%);
 }
 
 @media (max-width: 1024px) {
