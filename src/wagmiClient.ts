@@ -25,19 +25,6 @@ export const customChain: Chain = {
   }
 };
 
-// const connectors = connectorsForWallets(
-//   [
-//     {
-//       groupName: 'Suggested',
-//       wallets: [ ],
-//     },
-//   ],
-//   {
-//     appName: "Charlie_blockchain",
-//     projectId
-//   }
-// )
-
 const wagmiConfig = getDefaultConfig({
     appName: "Charlie_blockchain",
     projectId,
